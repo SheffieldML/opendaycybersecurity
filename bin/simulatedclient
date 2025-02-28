@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import requests
+import time
+import numpy as np
+
+queries = ['checksystem?all=1','view?camera=1&systemcheck=3','sonar?report=1&both=1','scan?range=40&reversed=10','sleep?time=5','wake?time=50','microphone?enable=0','refresh','scan?range=10','tactics?process=1','ai?enable=0','detect?range=40','beep?volume=0&length=10','gyro?enable=0','target?range=100','checksystem?all=0','view?camera=0&systemcheck=0','sonar?report=0&both=1'] * 10 #duplicate lots of times...
+idx = 0
+while True:
+    params = {
+        'username': 'admin',
+        'password': 'Sheff13ld',
+        'angle': np.random.randint(90)-45
+    }
+    
+    try:
+        if idx>=len(queries):
+            r = requests.get("http://127.0.0.1:5000/rotationcontrol", params=params)
+            idx = -1
+        else:
+            r = requests.get("http://127.0.0.1:5000/"+queries[idx], params=params)
+        idx+=1
+    except: #probably a problem connecting... keep going
+        pass
+    time.sleep(np.random.rand()/10)

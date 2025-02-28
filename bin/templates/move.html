@@ -1,0 +1,23 @@
+<html><head><title>[Activity 2] Robot Movement Control System</title></head><body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+<script>
+window.addEventListener("DOMContentLoaded", function() {
+  document.getElementById('move-form').addEventListener("submit", function(e) {
+    console.log('??')
+    //e.preventDefault(); // before the code
+    passhash = CryptoJS.MD5(document.getElementById('password').value).toString();
+    document.getElementById('password').value = passhash;
+    // Will be triggered on form submit
+    console.log(passhash);
+  })
+});
+        </script>
+<h1>[Activity 1] Robot Movement Control System</h1>
+<p>Hello, please enter your username and password and the distance to move the robot.
+<form action='/movecontrol' id='move-form'>Username: <input type='text' label='username' id='username' name='username'><br />
+Password: <input type='password' id='password' name='password' label='password'><br />
+Distance (in cm): <input type='text' label='distance' id='distance' name='distance'><br />
+<input type='submit' value='Enter'></form></body></html>
+
