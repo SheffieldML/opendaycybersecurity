@@ -1,0 +1,38 @@
+<html><head><title>Cybersecurity Hints!</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script>
+
+ function newmessage(message) {
+    //$("#hintbox").val($("#hintbox").val() + message);
+    //    var con = $('#hintbox');
+    //    con.scrollTop(con[0].scrollHeight - con.height());
+    if (message.includes("clearbox")) {        $("#hintbox").html(""); }
+    message = message.replace('clearbox','')
+                
+    $("#hintbox").html($("#hintbox").html() + message);
+    var divbox = $('#divbox');
+        divbox.scrollTop(divbox[0].scrollHeight - divbox.height());
+ }
+ 
+
+setInterval(function () {
+    url = "http://127.0.0.1:5001/getmessage";
+    $.ajax({
+        url: url,
+        success: function (data, status, jqXHR) {
+            if (data.length > 1) {
+                newmessage(data)
+
+            }
+        }
+    });
+}, 1000);
+</script>
+</head><body>
+<h1>Cybersecurity Hints!</h1>
+<p>Every so often we will provide you with a hint -- to help you if you're getting stuck!
+<div id="divbox" style="width:500px;height:500px;overflow:scroll;overflow-y:scroll;border-width:3px; border-style:solid; border-color:#FF0000; padding: 1em;">
+<p id="hintbox">
+</p>
+</body></html>
+

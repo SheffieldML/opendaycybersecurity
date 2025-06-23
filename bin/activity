@@ -1,72 +1,48 @@
 #!/usr/bin/env python
-
-from flask import Flask, make_response, jsonify, render_template
-from flask import request
-import numpy as np
-from flask_cors import CORS
-import json
-app = Flask(__name__)
-
-CORS(app)
-
 import argparse
-
 
 parser = argparse.ArgumentParser(description='Provide simple open day cybersecurity activity')
 #parser.add_argument('imgpath',type=str,help='Path to images')
 #parser.add_argument('--refreshcache',help='Whether to refresh the cache',action="store_true")
-#parser.add_argument('--port',required=False,type=int,help='Port')
+parser.add_argument('--target_port',required=False,type=int,default=5000,help='Port that the target server runs on (default 5000)')
+parser.add_argument('--hints_port',required=False,type=int,default=5001,help='Port that the hint server runs on (default 5001)')
+parser.add_argument('--start',default=None,required=False,type=str,help='Hint id to begin the system on.')
 #parser.add_argument('--nobrowser',help='Skip launching a web browser', action='store_true')
 args = parser.parse_args()
 
-@app.route("/")
-def home():
-    return render_template('index.html')
-   
-@app.route("/move")
-def move():
-    return render_template('move.html')
 
-@app.route('/movecontrol', methods=['POST', 'GET'])
-def movecontrol(): 
-    d = json.load(open('secrets.json'))
-    if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
-        return "Access granted. Moving robot %d cm" % int(request.args['angle'])
-    #print(str(request.args['username']))#.form['username']+" --> "+request.form['password'])
-    return "Access denied." #
+#some of these modules start running threads, so need importing after parser, so it can terminate the whole program with 'exit' if --help is called.
+import numpy as np
+from threading import Timer
+import opendaycybersecurity
+from opendaycybersecurity.target import start_target
+from opendaycybersecurity.hints import HintTrack
+from opendaycybersecurity.simulated_client import SimulatedClient
+import os
+import webbrowser
+
+
+
+opendaycybersecurity.hints.hint_track.target_port = args.target_port
+
+if args.start is not None: #if we start on a different hint from the default [0]...
+    opendaycybersecurity.hints.hint_track.jump_forward_to_stage(args.start)    
+
+
+def open_browser():
+    webbrowser.open("127.0.0.1:%d" % args.hints_port,new=2)  
+      
+Timer(5, open_browser).start()
     
+base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
+os.chdir(base_folder)
 
-@app.route('/rotationcontrol', methods=['POST', 'GET'])
-def rotationcontrol(): 
-    d = json.load(open('secrets.json'))
-    if (request.args['username']==d['activity1']['username']) and (request.args['password']==d['activity1']['password']):
-        return "Access granted. Rotating robot %d degrees" % int(request.args['angle'])
-    #print(str(request.args['username']))#.form['username']+" --> "+request.form['password'])
-    return "Access denied." #
-    #return "Welcome"    
+sc = SimulatedClient(args.target_port,0.1)
+threadlist = []
+threadlist.append(sc.start())
+threadlist.append(start_target(args.target_port))
+threadlist.append(opendaycybersecurity.hints.start_hints(args.hints_port))
 
-@app.route('/checksystem', methods=['POST', 'GET'])
-@app.route('/view', methods=['POST', 'GET'])
-@app.route('/sonar', methods=['POST', 'GET'])
-@app.route('/scan', methods=['POST', 'GET'])
-@app.route('/sleep', methods=['POST', 'GET'])
-@app.route('/wake', methods=['POST', 'GET'])
-@app.route('/microphone', methods=['POST', 'GET'])
-@app.route('/refresh', methods=['POST', 'GET'])
-@app.route('/scan', methods=['POST', 'GET'])
-@app.route('/tactics', methods=['POST', 'GET'])
-@app.route('/ai', methods=['POST', 'GET'])
-@app.route('/detect', methods=['POST', 'GET'])
-@app.route('/beep', methods=['POST', 'GET'])
-@app.route('/gyro', methods=['POST', 'GET'])
-@app.route('/target', methods=['POST', 'GET'])
-def catch(): 
-    print("catch!")
-    return "none\n"
+for t in threadlist:
+    t.join()
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
-
-
-['checksystem?all=1','view?camera=1&systemcheck=3','sonar?report=1&both=1','scan?range=40&reversed=10','sleep?time=5','wake?time=50','microphone?enable=0','refresh','scan?range=10','tactics?process=1','ai?enable=0','detect?range=40','beep?volume=0&length=10','move?speed=0','gyro?enable=0','target?range=100','checksystem?all=0','view?camera=0&systemcheck=0','sonar?report=0&both=1']
