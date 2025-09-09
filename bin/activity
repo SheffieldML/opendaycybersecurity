@@ -4,10 +4,10 @@ import argparse
 parser = argparse.ArgumentParser(description='Provide simple open day cybersecurity activity')
 #parser.add_argument('imgpath',type=str,help='Path to images')
 #parser.add_argument('--refreshcache',help='Whether to refresh the cache',action="store_true")
-parser.add_argument('--target_port',required=False,type=int,default=5000,help='Port that the target server runs on (default 5000)')
-parser.add_argument('--hints_port',required=False,type=int,default=5001,help='Port that the hint server runs on (default 5001)')
-parser.add_argument('--start',default=None,required=False,type=str,help='Hint id to begin the system on.')
-#parser.add_argument('--nobrowser',help='Skip launching a web browser', action='store_true')
+parser.add_argument('--rate',required=False,type=float,default=0.2,help='Speed client sends data (default = 0.2s/message).')
+parser.add_argument('--port',required=False,type=int,default=5000,help='Port that the target server runs on (default 5000)')
+parser.add_argument('--remote',required=False,type=str,help='Remote server (e.g. 192.168.1.123:5000)')
+parser.add_argument('--nobrowser',help='Skip launching a web browser', action='store_true')
 args = parser.parse_args()
 
 
@@ -16,32 +16,21 @@ import numpy as np
 from threading import Timer
 import opendaycybersecurity
 from opendaycybersecurity.target import start_target
-from opendaycybersecurity.hints import HintTrack
 from opendaycybersecurity.simulated_client import SimulatedClient
 import os
 import webbrowser
 
-
-
-opendaycybersecurity.hints.hint_track.target_port = args.target_port
-
-if args.start is not None: #if we start on a different hint from the default [0]...
-    opendaycybersecurity.hints.hint_track.jump_forward_to_stage(args.start)    
-
-
 def open_browser():
-    webbrowser.open("127.0.0.1:%d" % args.hints_port,new=2)  
-      
-Timer(5, open_browser).start()
-    
+    webbrowser.open("127.0.0.1:%d/rotate.html" % args.port,new=2)  
+if not args.nobrowser: Timer(5, open_browser).start()
+
 base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
 os.chdir(base_folder)
 
-sc = SimulatedClient(args.target_port,0.1)
+sc = SimulatedClient(args.port,args.rate/2)
 threadlist = []
 threadlist.append(sc.start())
-threadlist.append(start_target(args.target_port))
-threadlist.append(opendaycybersecurity.hints.start_hints(args.hints_port))
+threadlist.append(start_target(args.remote,args.port))
 
 for t in threadlist:
     t.join()

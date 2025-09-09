@@ -19,29 +19,32 @@ class SimulatedClient:
         self.rate = rate
         
     def worker(self):
-        print("Rate: %0.2f" % self.rate)
+        print("Simulated client query rate, averages 2 times %0.2f s/query" % self.rate)
         idx = 0
-        time.sleep(5)
+        time.sleep(1) #wait one second before starting
+        print("Simulated client sending queries")
         while True:    
             idx+=1
             if idx>=len(self.queries): idx=0        
-            print("Sending query...")
+            #print("Sending query...")
             querystring = self.queries[idx]
             try:
                 if querystring == 'rotationcontrol':
                     params = {
                         'username': 'admin',
                         'password': 'Sheff13ld',
-                        'angle': 5, #np.random.randint(90)-45
+                        'angle': 1.0113, 
                     }
+                    #print("Sending simulated client rotationcontrol command")
                     r = requests.get("http://127.0.0.1:%d/rotationcontrol" % self.target_port, params=params)
                     continue
                 if querystring == 'movecontrol':
                     params = {
                         'username': 'admin',
                         'password': '202cb962ac59075b964b07152d234b70',
-                        'distance': 1, #np.random.randint(90)-45
-                    }                
+                        'distance': 1.0113,
+                    }
+                    #print("Sending simulated client movecontrol command")                    
                     r = requests.get("http://127.0.0.1:%d/movecontrol" % self.target_port, params=params)
                     continue
 
