@@ -38,7 +38,7 @@ def drop_form():
     return render_template('drop.html')  
 
 import os
-client_id = int.from_bytes(os.urandom(5))
+client_id = int.from_bytes(os.urandom(5),byteorder='big')
 
 
 emails = {}
