@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
+@app.route("/turn/<int:angle>")
+def turn(angle):
+    a = os.system("ros2 run com_offer_holder_days turn.py --ros_args -p yaw_ang:=%d" % angle) 
+    print(a)
+    return str(a)
+    
+    
+
+@app.route("/forward/<float:dist>")
+def forward(dist):
+
+    a = os.system("ros2 run com_offer_holder_days forward.py --ros_args -p fwd_dist:=%0.2f" % dist) 
+    print(a)
+    return str(a)
+    
+    
+app.run(host="0.0.0.0", port=5010)
