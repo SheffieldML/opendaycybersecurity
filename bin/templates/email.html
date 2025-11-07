@@ -11,23 +11,30 @@
     
     <body>
     <h1>[Activity 3] Email System</h1>
+    <p><b>Inbox [<span id="num">0</span> emails]</b></p>
     <p id="receivedemails"></p>
-<p>Internal Email system<br/>
+<p><b>Write Email:</b><br/>
 <div class="conversation"></div>
+To: Emma<br />
 <form id='email-form'>Subject: <input type='text' label='subject' id='subject' name='subject'><br />
 Message<br/>
 <textarea label='message' id='message' name='message' rows="10" cols="40">
 </textarea>
-<a href="#" id="send">send</a>
+<a href="#" id="send">send</a> <span id="sentmsg">Sent!</span>
 </form>
 <script type="text/javascript"> 
+$('span#sentmsg').hide();
+num_emails = 0;
             $('#send').on('click',function(){
                 url = 'http://{{server}}/sendemail?subject='+encodeURIComponent($('input#subject').val())+"&message="+encodeURIComponent($('textarea#message').val());
-                
                 $.getJSON(url, function(data) {
-                    alert('sent '+url);
+                    console.log("Sent Email");
+                    $('input#subject').val("");
+                    $('textarea#message').val("");
+                    $('span#sentmsg').show();
+                    $('span#sentmsg').fadeOut(3000);
                 });
-            alert("!");
+                
             }) 
 
         
@@ -35,7 +42,17 @@ Message<br/>
                 url = "http://{{server}}/checkemail";
                 $.ajax({
                     url: url,
-                    success: function (data, status, jqXHR) { for (var i=0;i<JSON.parse(data).length;i++) {d=JSON.parse(data)[i]; console.log(d); $('p#receivedemails').html( $('p#receivedemails').html()+"<br/><b>"+d['sub']+"</b><br/>"+d['msg']); } } });
+                    success: function (data, status, jqXHR) { 
+                      for (var i=0;i<data.length;i++) {
+                        d=data[i];
+                        
+                        console.log(d); 
+                        $('p#receivedemails').html( $('p#receivedemails').html()+"<b>From: Emma<br/>Subject: "+d['sub']+"</b><br/>"+d['msg']+"<br/><br/>"); 
+                        num_emails = num_emails + 1;
+                        $('span#num').html(num_emails.toString());
+                      } 
+                    }
+                  });
                 },500);
         </script>
 

@@ -33,7 +33,7 @@ class SimulatedClient:
                     params = {
                         'username': 'admin',
                         'password': 'Sheff13ld',
-                        'angle': 1.0113, 
+                        'angle': 1, 
                     }
                     #print("Sending simulated client rotationcontrol command")
                     r = requests.get("http://127.0.0.1:%d/rotationcontrol" % self.target_port, params=params)
@@ -42,7 +42,7 @@ class SimulatedClient:
                     params = {
                         'username': 'admin',
                         'password': '202cb962ac59075b964b07152d234b70',
-                        'distance': 1.0113,
+                        'distance': 0.01,
                     }
                     #print("Sending simulated client movecontrol command")                    
                     r = requests.get("http://127.0.0.1:%d/movecontrol" % self.target_port, params=params)

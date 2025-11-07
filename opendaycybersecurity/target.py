@@ -1,6 +1,8 @@
 import threading
+import random
 from flask import Flask, make_response, jsonify, render_template
 from flask import request
+import datetime
 import numpy as np
 import urllib.request
 from flask_cors import CORS
@@ -14,7 +16,7 @@ app = Flask(__name__,template_folder=template_folder)
 CORS(app)
 
 port = 0
-server = ''
+#server = ''
 
 @app.route("/rotate.html")
 def rotate_form():
@@ -28,106 +30,151 @@ def move_form():
 def email_form():
     return render_template('email.html',server="127.0.0.1:%d" % port)    
     
-@app.route("/admin.html")
-def admin_form():
-    return render_template('email_admin.html',server="127.0.0.1:%d" % port)
+#@app.route("/admin.html")
+#def admin_form():
+#    return render_template('email_admin.html',server="127.0.0.1:%d" % port)
 
    
-@app.route("/drop.html")
-def drop_form():
-    return render_template('drop.html')  
+#@app.route("/drop.html")
+#def drop_form():
+#    return render_template('drop.html')  
 
-import os
-client_id = int.from_bytes(os.urandom(5),byteorder='big')
+#import os
+#client_id = int.from_bytes(os.urandom(5),byteorder='big')
 
 
-emails = {}
-@app.route('/recordemail',methods=['POST','GET'])
-def recordemail():
-    global emails
-    #request.args
-    args = request.args.to_dict()
-    print(args)
-    mpa = dict.fromkeys(range(32))
-    msg = args['message'].translate(mpa)
-    sub = args['subject'].translate(mpa)
-    recipient = args['recipient'].translate(mpa)
-    sender = args['sender'].translate(mpa)
-    if recipient not in emails: emails[recipient] = []
-    emails[recipient].append({'sender':sender,'sub':sub,'msg':msg})
-    return "done", 200
+#emails = {}
+#@app.route('/recordemail',methods=['POST','GET'])
+#def recordemail():
+#    global emails
+#    #request.args
+#    args = request.args.to_dict()
+#    print(args)
+#    mpa = dict.fromkeys(range(32))
+#    msg = args['message'].translate(mpa)
+#    sub = args['subject'].translate(mpa)
+#    recipient = args['recipient'].translate(mpa)
+#    sender = args['sender'].translate(mpa)
+#    if recipient not in emails: emails[recipient] = []
+#    emails[recipient].append({'sender':sender,'sub':sub,'msg':msg})
+#    return "done", 200
 
-@app.route('/collectemail',methods=['POST','GET'])
-def collectemail():
-    global emails
-    print("EMAILS")
-    print(emails)
-
-    args = request.args.to_dict()
-    #request.args
-    #print(request.args)
-    mpa = dict.fromkeys(range(32))
-    recipient = args['recipient'].translate(mpa)
-    if recipient not in emails: return []
-    msg = jsonify(emails[recipient])
-    del emails[recipient]
-    return msg
+#@app.route('/collectemail',methods=['POST','GET'])
+#def collectemail():
+#    global emails
+#    print("EMAILS")
+#    print(emails)
+#
+#    args = request.args.to_dict()
+#    #request.args
+#    #print(request.args)
+#    mpa = dict.fromkeys(range(32))
+#    recipient = args['recipient'].translate(mpa)
+#    if recipient not in emails: return []
+#    msg = jsonify(emails[recipient])
+#    del emails[recipient]
+#    return msg
     
+#@app.route('/oldsendemail', methods=['POST', 'GET'])
+#def oldsendemail(): 
+#    global server
+#    #request.args
+#    print(request.args)
+#    mpa = dict.fromkeys(range(32))
+#    args = request.args.to_dict()
+#    msg = args['message'].translate(mpa)
+#    sub = args['subject'].translate(mpa)
+#    if 'recipient' in args:
+#        recipient = args['recipient'].translate(mpa)
+#        sender = 0    
+#    else:
+#        recipient = 0
+#        sender = client_id
+#    try:
+#        items = {'subject':sub, 'message':msg, 'recipient':recipient, 'sender':sender}
+#        import requests
+#        contents = requests.get('http://'+server+'/recordemail', params=items)
+#        #contents = urllib.request.urlopen("http://127.0.0.1:5001/recordemail?"+query_string) #subject=%s&message=%s&recipient=%s&sender=%s"% (sub,msg,recipient,sender))
+#    except Exception as e:
+#        print(e)
+#        return "failed to send email (%s)" % str(e), 503 #jsonify('Failed to send email.',status=503)
+#    return jsonify('Success')
+
+email_reply = None
+email_countdown = datetime.datetime.now()
+
 @app.route('/sendemail', methods=['POST', 'GET'])
 def sendemail(): 
-    global server
+    print("Sending!")
+    global email_countdown
+    global email_reply
     #request.args
     print(request.args)
     mpa = dict.fromkeys(range(32))
     args = request.args.to_dict()
     msg = args['message'].translate(mpa)
     sub = args['subject'].translate(mpa)
-    if 'recipient' in args:
-        recipient = args['recipient'].translate(mpa)
-        sender = 0    
+    email_countdown = datetime.datetime.now() + datetime.timedelta(0,random.randrange(3,6))
+    if (len(msg)>50) and (len(sub)>3):
+        email_reply = True
+        
     else:
-        recipient = 0
-        sender = client_id
-    try:
-        items = {'subject':sub, 'message':msg, 'recipient':recipient, 'sender':sender}
-        import requests
-        contents = requests.get('http://'+server+'/recordemail', params=items)
-        #contents = urllib.request.urlopen("http://127.0.0.1:5001/recordemail?"+query_string) #subject=%s&message=%s&recipient=%s&sender=%s"% (sub,msg,recipient,sender))
-    except Exception as e:
-        print(e)
-        return "failed to send email (%s)" % str(e), 503 #jsonify('Failed to send email.',status=503)
+        email_reply = False
     return jsonify('Success')
 
-@app.route('/setid/<int:newid>')
-def setid(newid):
-    global client_id
-    msg = "Done (%d->%d)" % (client_id,newid)
-    client_id = newid
-    return msg
+#@app.route('/setid/<int:newid>')
+#def setid(newid):
+#    global client_id
+#    msg = "Done (%d->%d)" % (client_id,newid)
+#    client_id = newid
+#    return msg
+
+#@app.route('/checkemail', methods=['POST', 'GET'])
+#def checkemail():
+#    global server
+#    try:
+#        contents = urllib.request.urlopen("http://"+server+"/collectemail?recipient=%s"% (client_id))
+#    except:
+#        return "failed to check email", 503 #jsonify('Failed to check email.',status=503)
+#    return contents
+
 
 @app.route('/checkemail', methods=['POST', 'GET'])
 def checkemail():
-    global server
-    try:
-        contents = urllib.request.urlopen("http://"+server+"/collectemail?recipient=%s"% (client_id))
-    except:
-        return "failed to check email", 503 #jsonify('Failed to check email.',status=503)
-    return contents
-
-
-@app.route('/dropcontrol', methods=['POST', 'GET'])
-def dropcontrol(): 
     d = json.load(open('secrets.json'))
-    if (request.args['username']==d['activity3']['username']) and (request.args['password']==d['activity3']['password']):
-        return "Access granted. Dropping ball-bearing"
-    return "Access denied.", 401 #
+    global email_reply
+    print(email_reply)
+    if email_reply is None:
+        print("Email reply is none")
+        return jsonify([]) #no emails
+        #return "no emails", 404
+    else:
+        if datetime.datetime.now()>email_countdown:
+            if email_reply:
+                email_reply = None
+                return jsonify([{'sub':d['success_email_subject'], 'msg':d['success_email_message']}])
+            else:
+                email_reply = None
+                return jsonify([{'sub':d['sorry_email_subject'], 'msg':d['sorry_email_message']}])
+        else:
+            return jsonify([])
+        #return "failed to check email", 503 #jsonify('Failed to check email.',status=503)
+    return contents
+    
+#@app.route('/dropcontrol', methods=['POST', 'GET'])
+#def dropcontrol(): 
+#    d = json.load(open('secrets.json'))
+#    if (request.args['username']==d['activity3']['username']) and (request.args['password']==d['activity3']['password']):
+#        return "Access granted. Dropping ball-bearing"
+#    return "Access denied.", 401 #
    
 
 @app.route('/movecontrol', methods=['POST', 'GET'])
 def movecontrol(): 
     d = json.load(open('secrets.json'))
     if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
-        return "Access granted. Moving robot %0.2f cm" % float(request.args['distance'])
+        os.system('ros2 run com_offer_holder_days forward.py --ros-args -p dist:=%0.3f &' % float(request.args['distance']))
+        return "Access granted. Moving robot %0.3f m" % float(request.args['distance'])
     return "Access denied.", 401 #
     
 
@@ -140,9 +187,8 @@ def rotationcontrol():
 
     if (request.args['username']==d['activity1']['username']) and (request.args['password']==d['activity1']['password']):
         try:
-            if float(request.args['angle'])!=1.0113:
-                print("rotationcontrol endpoint accessed successfully")
-            return "Access granted. Rotating robot %0.2f degrees" % float(request.args['angle'])
+            os.system('ros2 run com_offer_holder_days turn.py --ros-args -p angle:=%d &' % int(request.args['angle']))
+            return "Access granted. Rotating robot %0d degrees" % int(request.args['angle'])
         except:
             return "Control failed (did you fill all the form fields correctly?)"
     return "Access denied.", 401

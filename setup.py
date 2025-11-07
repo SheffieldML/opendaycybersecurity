@@ -10,6 +10,6 @@ setup(
   download_url = 'https://github.com/lionfish0/opendaycybersecurity.git',
   keywords = ['openday','Sheffield','cybersecurity'],
   classifiers = [],
-  install_requires=['numpy','flask','flask_cors'],
+  install_requires=['numpy','flask','flask_cors','requests'],
   scripts=['bin/activity'],
 )
