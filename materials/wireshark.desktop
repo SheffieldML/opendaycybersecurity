@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Wireshark
+Exec=wireshark -i lo -k
+Terminal=True
+Type=Application
+
