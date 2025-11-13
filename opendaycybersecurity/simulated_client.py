@@ -2,6 +2,7 @@ import requests
 import time
 import numpy as np
 import threading
+import json
 
 class SimulatedClient:
     def __init__(self,target_port = 5000, rate=0.1):
@@ -17,6 +18,8 @@ class SimulatedClient:
         self.queries += ['rotationcontrol','movecontrol']
         self.target_port = target_port
         self.rate = rate
+        self.secrets = json.load(open('secrets.json'))
+        
         
     def worker(self):
         print("Simulated client query rate, averages 2 times %0.2f s/query" % self.rate)
@@ -31,8 +34,8 @@ class SimulatedClient:
             try:
                 if querystring == 'rotationcontrol':
                     params = {
-                        'username': 'admin',
-                        'password': 'Sheff13ld',
+                        'username': self.secrets['activity1']['username'],
+                        'password': self.secrets['activity1']['password'],
                         'angle': 1, 
                     }
                     #print("Sending simulated client rotationcontrol command")
@@ -40,8 +43,8 @@ class SimulatedClient:
                     continue
                 if querystring == 'movecontrol':
                     params = {
-                        'username': 'admin',
-                        'password': '202cb962ac59075b964b07152d234b70',
+                        'username': self.secrets['activity2']['username'],
+                        'password': self.secrets['activity2']['password'],
                         'distance': 0.01,
                     }
                     #print("Sending simulated client movecontrol command")                    

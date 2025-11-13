@@ -12,7 +12,8 @@ import opendaycybersecurity
 #base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
 #os.chdir(base_folder)
 template_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin','templates'])
-app = Flask(__name__,template_folder=template_folder)
+static_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin','static'])
+app = Flask(__name__,template_folder=template_folder,static_folder="static")
 CORS(app)
 
 port = 0
@@ -28,7 +29,17 @@ def move_form():
 
 @app.route("/email.html")
 def email_form():
-    return render_template('email.html',server="127.0.0.1:%d" % port)    
+    return render_template('email.html',server="127.0.0.1:%d" % port)
+    
+@app.route("/full.html")
+def full_form():
+
+    global move_success
+    global turn_success
+    if move_success and turn_success:
+        return render_template('full.html',server="127.0.0.1:%d" % port)
+    else:
+        return render_template('full_access_denied.html')
     
 #@app.route("/admin.html")
 #def admin_form():
@@ -102,6 +113,8 @@ def email_form():
 
 email_reply = None
 email_countdown = datetime.datetime.now()
+move_success = False
+turn_success = False
 
 @app.route('/sendemail', methods=['POST', 'GET'])
 def sendemail(): 
@@ -169,14 +182,45 @@ def checkemail():
 #    return "Access denied.", 401 #
    
 
+
+def move_robot(distance):
+    print("MOVING ROBOT: %0.2fm" % distance)
+    os.system('ros2 run com_offer_holder_days forward.py --ros-args -p dist:=%0.3f &' % distance)
+    
+def turn_robot(angle):
+    print("TURNING ROBOT: %d degrees" % angle)
+    os.system('ros2 run com_offer_holder_days turn.py --ros-args -p angle:=%d &' % int(angle))
+
 @app.route('/movecontrol', methods=['POST', 'GET'])
 def movecontrol(): 
     d = json.load(open('secrets.json'))
     if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
-        os.system('ros2 run com_offer_holder_days forward.py --ros-args -p dist:=%0.3f &' % float(request.args['distance']))
+        move_robot(float(request.args['distance']))
+        global move_success
+        move_success = True
         return "Access granted. Moving robot %0.3f m" % float(request.args['distance'])
-    return "Access denied.", 401 #
+    return "Access denied.", 401
     
+
+@app.route('/fullcontrol', methods=['POST', 'GET'])
+def fullcontrol(): 
+    global move_success
+    global turn_success
+    if not move_success or not turn_success:
+        return jsonify([]), 401
+    
+    if request.args['button']=='fastforward':
+        move_robot(1)
+    if request.args['button']=='forward':
+        move_robot(0.1)
+    if request.args['button']=='backward':
+        move_robot(-0.1)
+    if request.args['button']=='left':
+        turn_robot(-30)
+    if request.args['button']=='right':
+        turn_robot(30)
+    return jsonify([]), 200
+
 
 @app.route('/rotationcontrol', methods=['POST', 'GET'])
 def rotationcontrol(): 
@@ -187,7 +231,9 @@ def rotationcontrol():
 
     if (request.args['username']==d['activity1']['username']) and (request.args['password']==d['activity1']['password']):
         try:
-            os.system('ros2 run com_offer_holder_days turn.py --ros-args -p angle:=%d &' % int(request.args['angle']))
+            turn_robot(int(request.args['angle']))
+            global turn_success
+            turn_success = True
             return "Access granted. Rotating robot %0d degrees" % int(request.args['angle'])
         except:
             return "Control failed (did you fill all the form fields correctly?)"
