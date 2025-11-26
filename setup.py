@@ -11,5 +11,5 @@ setup(
   keywords = ['openday','Sheffield','cybersecurity'],
   classifiers = [],
   install_requires=['numpy','flask','flask_cors','requests'],
-  scripts=['bin/activity'],
+  scripts=['bin/activity', 'bin/hashcat'],
 )

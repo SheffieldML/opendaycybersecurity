@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+import opendaycybersecurity
+import argparse
+import os
+import time
+parser = argparse.ArgumentParser(description='This is a simulation/pretend version of hashcat, as IT security won\'t allow us to run real password hash cracking tools!')
+parser.add_argument('shadowfile',type=str,help='Path to shadow file')
+args = parser.parse_args()
+
+dictfile = os.path.join(os.path.dirname(opendaycybersecurity.__file__),'../materials/dict')
+for hash_number,line in enumerate(open(args.shadowfile)):
+    row = line.split(':')
+    password_hash = row[1]
+    username = row[0]
+    password = None
+    if password_hash == '$y$j9T$slrlXoLY35BvCzqPOb2jq/$riD74Z2mTItVsNrX8ju4pUVNgzJ2MQ8e3ZhY./f2BQ8': password = 'elephant'
+    if password_hash == '$y$j9T$HDiOyl.Bg2DyIh4xgAQo11$a4747NVFF9Pis3uTRLVjSOGkN0vqNJpSYLMAPsN/0a.': password = 'welcometosheffield'
+
+    #animation to look like it's busy...
+    dict = open(dictfile)
+    for l in dict:
+        word = l.replace("\n","")
+        if '\'' in l: continue
+        if l[0]==password[0]:
+            word = password        
+        print('Trying passwords: %s           ' % word,end="\r")
+        time.sleep(0.001)
+        if l[0]==password[0]:       
+            break
+    print("\n")
+    if password is not None:
+        print("Solved hash %d:" % (hash_number+1))
+        print("Username: %s" % username)
+        print("Password: %s" % password)
+        print("")
+ 
+print("\n\nSearch complete")
+#for n,line in enumerate(open('dict')):
+#    if n%20==0:
+#        print(line,end='')
