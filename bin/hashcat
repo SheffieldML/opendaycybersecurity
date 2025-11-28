@@ -7,7 +7,8 @@ parser = argparse.ArgumentParser(description='This is a simulation/pretend versi
 parser.add_argument('shadowfile',type=str,help='Path to shadow file')
 args = parser.parse_args()
 
-dictfile = os.path.join(os.path.dirname(opendaycybersecurity.__file__),'../materials/dict')
+dictfile = os.path.join(os.path.dirname(opendaycybersecurity.__file__),'dict')
+#try:
 for hash_number,line in enumerate(open(args.shadowfile)):
     row = line.split(':')
     password_hash = row[1]
@@ -33,6 +34,8 @@ for hash_number,line in enumerate(open(args.shadowfile)):
         print("Username: %s" % username)
         print("Password: %s" % password)
         print("")
+#except FileNotFoundError:
+#    print("The specified shadowfile was not found: %s." % args.shadowfile)
  
 print("\n\nSearch complete")
 #for n,line in enumerate(open('dict')):
