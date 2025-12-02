@@ -36,6 +36,7 @@ def full_form():
 
     global move_success
     global turn_success
+    print(move_success, turn_success)
     if move_success and turn_success:
         return render_template('full.html',server="127.0.0.1:%d" % port)
     else:
@@ -197,7 +198,8 @@ def movecontrol():
     if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
         move_robot(float(request.args['distance']))
         global move_success
-        move_success = True
+        if float(request.args['distance'])!=0.01: #the synthetic user always sends a 'one' -- we don't want that user allowing us access.
+            move_success = True
         return "Access granted. Moving robot %0.3f m" % float(request.args['distance'])
     return "Access denied.", 401
     
@@ -233,7 +235,8 @@ def rotationcontrol():
         try:
             turn_robot(int(request.args['angle']))
             global turn_success
-            turn_success = True
+            if int(request.args['angle'])!=1: #sythetic user always sends 1 degree -- this avoids that user from enabling access
+                turn_success = True
             return "Access granted. Rotating robot %0d degrees" % int(request.args['angle'])
         except:
             return "Control failed (did you fill all the form fields correctly?)"
