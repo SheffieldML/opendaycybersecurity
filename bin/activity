@@ -24,7 +24,11 @@ def open_browser():
     webbrowser.open("127.0.0.1:%d/rotate.html" % args.port,new=2)  
 if not args.nobrowser: Timer(5, open_browser).start()
 
-base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
+#how to get to the bin folder?
+pathsplit = opendaycybersecurity.__file__.split(os.sep)
+while pathsplit[-2]=='opendaycybersecurity': pathsplit = pathsplit[:-1]
+base_folder = os.sep.join(pathsplit + ['bin'])
+#base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
 os.chdir(base_folder)
 
 sc = SimulatedClient(args.port,args.rate/2)
