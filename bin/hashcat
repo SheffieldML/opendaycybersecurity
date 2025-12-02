@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import opendaycybersecurity
 import argparse
 import os
 import time
