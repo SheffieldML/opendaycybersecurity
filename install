@@ -1,0 +1,3 @@
+sudo apt install wireshark
+sudo usermod -a -G wireshark student
+sudo chmod 755 /usr/bin/dumpcap
