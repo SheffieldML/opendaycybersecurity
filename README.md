@@ -20,6 +20,7 @@ git clone https://github.com/SheffieldML/opendaycybersecurity.git
 pip install -e opendaycybersecurity/
 git clone https://github.com/tom-howard/com_offer_holder_days.git
 cp ~/opendaycybersecurity/materials/lowireshark.desktop Desktop
+cp ~/opendaycybersecurity/materials/lowireshark.desktop ~/.local/share/applications/
 ```
 
 Then on the desktop find the wireshark icon. Right click and select Allow Launching
