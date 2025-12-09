@@ -34,7 +34,7 @@ source ~/.bashrc
 ```
 
 # On The Day
-The following instructions are copied from [here](https://tom-howard.github.io/com2009/waffles/launching-ros).
+The following instructions are copied from [here](https://tom-howard.github.io/ros2/waffles/launching-ros).
 ```
 waffle X pair
 ```
@@ -48,9 +48,9 @@ waffle X term
 ```
 Then:
 ```
-tb3_bringup
+ros2 launch tuos_tb3_tools ros.launch.py
 ```
 In a new terminal, run:
 ```
-waffle X bridge
+ros2 run rmw_zenoh_cpp rmw_zenohd
 ```
