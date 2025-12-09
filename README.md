@@ -16,7 +16,7 @@ As the student account:
 cd ~
 git clone https://github.com/SheffieldML/opendaycybersecurity.git
 cd ~/opendaycybersecurity
-python3 -m venv venv/
+python3 -m venv venv --system-site-packages
 source venv/bin/activate
 pip install -e ~/opendaycybersecurity/
 cp ~/opendaycybersecurity/materials/lowireshark.desktop Desktop
