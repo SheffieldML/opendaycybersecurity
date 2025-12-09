@@ -34,6 +34,9 @@ source ~/.bashrc
 ```
 
 # On The Day
+
+## Running the Waffle
+
 The following instructions are copied from [here](https://tom-howard.github.io/ros2/waffles/launching-ros).
 ```
 waffle X pair
@@ -54,3 +57,27 @@ In a new terminal, run:
 ```
 ros2 run rmw_zenoh_cpp rmw_zenohd
 ```
+
+## Running the Web Server
+
+Activate the virtual environment:
+
+```
+source ~/opendaycybersecurity/venv/bin/activate
+```
+
+Launch the activity:
+
+```
+activity
+```
+
+### Stopping the Web Server
+
+To kill the web server, use:
+
+```
+pkill activity
+``` 
+
+(from a separate terminal.)
