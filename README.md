@@ -10,6 +10,7 @@ git clone https://github.com/SheffieldML/opendaycybersecurity.git
 chmod 755 ~/opendaycybersecurity/install
 ~/opendaycybersecurity/install
 ```
+(choose 'yes' when it asks if non-superusers should be able to capture packets).
 
 As the student account:
 ```
