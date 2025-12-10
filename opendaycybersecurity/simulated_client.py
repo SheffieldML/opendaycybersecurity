@@ -36,7 +36,7 @@ class SimulatedClient:
                     params = {
                         'username': self.secrets['activity1']['username'],
                         'password': self.secrets['activity1']['password'],
-                        'angle': 1, 
+                        'angle': 0, 
                     }
                     #print("Sending simulated client rotationcontrol command")
                     r = requests.get("http://127.0.0.1:%d/rotationcontrol" % self.target_port, params=params)
@@ -45,7 +45,7 @@ class SimulatedClient:
                     params = {
                         'username': self.secrets['activity2']['username'],
                         'password': self.secrets['activity2']['password'],
-                        'distance': 0.01,
+                        'distance': 0.0,
                     }
                     #print("Sending simulated client movecontrol command")                    
                     r = requests.get("http://127.0.0.1:%d/movecontrol" % self.target_port, params=params)

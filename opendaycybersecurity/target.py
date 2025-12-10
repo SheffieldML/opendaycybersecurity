@@ -198,7 +198,7 @@ def movecontrol():
     if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
         move_robot(float(request.args['distance']))
         global move_success
-        if float(request.args['distance'])!=0.01: #the synthetic user always sends a 'one' -- we don't want that user allowing us access.
+        if float(request.args['distance'])!=0.0: #the synthetic user always sends a '0.0' -- we don't want that user allowing us access.
             move_success = True
         return "Access granted. Moving robot %0.3f m" % float(request.args['distance'])
     return "Access denied.", 401
@@ -235,7 +235,7 @@ def rotationcontrol():
         try:
             turn_robot(int(request.args['angle']))
             global turn_success
-            if int(request.args['angle'])!=1: #sythetic user always sends 1 degree -- this avoids that user from enabling access
+            if int(request.args['angle'])!=0: #sythetic user always sends 0 degree -- this avoids that user from enabling access
                 turn_success = True
             return "Access granted. Rotating robot %0d degrees" % int(request.args['angle'])
         except:
