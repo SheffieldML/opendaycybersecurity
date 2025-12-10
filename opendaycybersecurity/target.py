@@ -212,15 +212,15 @@ def fullcontrol():
         return jsonify([]), 401
     
     if request.args['button']=='fastforward':
-        move_robot(1)
+        move_robot(0.5)
     if request.args['button']=='forward':
         move_robot(0.05)
     if request.args['button']=='backward':
         move_robot(-0.05)
     if request.args['button']=='left':
-        turn_robot(30)
+        turn_robot(20)
     if request.args['button']=='right':
-        turn_robot(-30)
+        turn_robot(-20)
     return jsonify([]), 200
 
 
