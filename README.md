@@ -20,11 +20,9 @@ cd ~/opendaycybersecurity
 python3 -m venv venv --system-site-packages
 source venv/bin/activate
 pip install -e ~/opendaycybersecurity/
-cp ~/opendaycybersecurity/materials/lowireshark.desktop Desktop
 cp ~/opendaycybersecurity/materials/lowireshark.desktop ~/.local/share/applications/
 ```
-Then on the desktop find the wireshark icon. Right click and select Allow Launching
-After a reboot! Open the launcher and start typing LoWi… then right click and press ‘Pin to Dash’
+Open the launcher and start typing LoWi… then right click and press ‘Pin to Dash’
 
 The following instructions are copied from [here](https://github.com/tom-howard/com_offer_holder_days/blob/main/README.md).
 ```
