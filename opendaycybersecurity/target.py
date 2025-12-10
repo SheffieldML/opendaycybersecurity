@@ -214,9 +214,9 @@ def fullcontrol():
     if request.args['button']=='fastforward':
         move_robot(1)
     if request.args['button']=='forward':
-        move_robot(0.1)
+        move_robot(0.05)
     if request.args['button']=='backward':
-        move_robot(-0.1)
+        move_robot(-0.05)
     if request.args['button']=='left':
         turn_robot(30)
     if request.args['button']=='right':
