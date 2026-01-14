@@ -1,13 +1,41 @@
 #!/usr/bin/python
-
-#  Raspberry Pi Master for Arduino Slave
-#  i2c_master_pi.py
-#  Connects to Arduino via I2C
-#  DroneBot Workshop 2019
-#  https://dronebotworkshop.com
-
+ 
 from smbus import SMBus
-
-addr = 0x8 # bus address
-bus = SMBus(1) # indicates /dev/ic2-1
-bus.write_byte(addr, ord('k')) # switch it on
+from datetime import datetime,timedelta
+import pickle
+from pathlib import Path
+import sys
+import os
+if len(sys.argv)>1:
+  try:
+    id = int(sys.argv[1])
+    if (id<1) or (id>4):
+      print("Invalid drop id. Must be between 1 and 4.")
+      sys.exit(1)
+  except:
+    print("Invalid drop id. Must be an integer between 1 and 4.")
+    sys.exit(1)
+else:
+  print("Specify the dropper (1-4) you wish to operate, e.g.:\n\n    $ drop 3\n")
+  sys.exit(1)
+ 
+ipaddress = os.environ['SSH_CLIENT'].split(' ')[0]
+ 
+(Path.home() / ".drop").mkdir(parents=True,exist_ok=True)
+datafile = Path.home() / ".drop" / ("lastrun_%s.pkl" % ipaddress)
+ 
+dt = datetime.now()
+try:
+  last = pickle.load(open(datafile,'rb'))
+except:
+  last = dt-timedelta(1)
+wait = last+timedelta(seconds=10)-dt
+ 
+if (wait<timedelta(0)):
+  print("Dropping at hopper %d." % id)
+  pickle.dump(dt,open(datafile,'wb'))
+  addr = 4+id #0x8 # bus address
+  bus = SMBus(1) # indicates /dev/ic2-1
+  bus.write_byte(addr, ord('k')) # switch it on
+else:
+  print("Drop rate limited to once every 10 seconds. You need to wait another %0.0f seconds." % (wait.seconds+1))
