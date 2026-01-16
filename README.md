@@ -31,6 +31,7 @@ git clone https://github.com/tom-howard/com_offer_holder_days.git
 cd ~/ros2_ws/ && colcon build --packages-select com_offer_holder_days
 source ~/.bashrc
 ```
+Right click on toolbar, and set bookmark toolbar always visible. Then you can drag these links onto the toolbar.
 Add links to the bookmarks toolbar:
 - [Challenge 1](http://127.0.0.1:5000/rotate.html)
 - [Challenge 2](http://127.0.0.1:5000/move.html)
