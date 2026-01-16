@@ -87,3 +87,11 @@ pkill activity
 ``` 
 
 (from a separate terminal.)
+
+### Using tmux:
+
+```
+tmux ls
+tmux a -t 0
+Ctrl-B d
+```
