@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=LoWireshark
-Exec=wireshark -i lo -k
-Terminal=True
-Type=Application
-Icon=/usr/share/icons/hicolor/256x256/apps/org.wireshark.Wireshark.png
-StartupWMClass=Wireshark
