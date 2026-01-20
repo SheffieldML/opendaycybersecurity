@@ -185,10 +185,14 @@ def checkemail():
 
 
 def move_robot(distance):
+    if (distance>3): distance = 3
+    if (distance<-3): distance = -3
     print("MOVING ROBOT: %0.2fm" % distance)
     os.system('ros2 run com_offer_holder_days forward.py --ros-args -p dist:=%0.3f &' % distance)
     
 def turn_robot(angle):
+    if (angle>360): angle = 360
+    if (angle<-360): angle = -360
     print("TURNING ROBOT: %d degrees" % angle)
     os.system('ros2 run com_offer_holder_days turn.py --ros-args -p angle:=%d &' % int(angle))
 
