@@ -3,6 +3,8 @@ Activity for open day
 
 # Install Instructions
 
+Note: I recommended visiting this page from the laptop, so you can copy and paste these commands!
+
 As the sudo account:
 ```
 cd ~
@@ -23,6 +25,8 @@ pip install -e ~/opendaycybersecurity/
 cp ~/opendaycybersecurity/materials/lowireshark.desktop ~/.local/share/applications/
 ```
 Open the launcher and start typing LoWi… then right click and press ‘Pin to Dash’
+
+Open the launcher and start typing Text Editor then right click and press 'Pin to Dash'.
 
 The following instructions are copied from [here](https://github.com/tom-howard/com_offer_holder_days/blob/main/README.md).
 ```
