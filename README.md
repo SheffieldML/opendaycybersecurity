@@ -22,7 +22,7 @@ cd ~/opendaycybersecurity
 python3 -m venv venv --system-site-packages
 source venv/bin/activate
 pip install -e ~/opendaycybersecurity/
-cp ~/opendaycybersecurity/materials/lowireshark.desktop ~/.local/share/applications/
+cp ~/opendaycybersecurity/materials/LoWireshark.desktop ~/.local/share/applications/
 ```
 Open the launcher and start typing LoWi… then right click and press ‘Pin to Dash’
 
