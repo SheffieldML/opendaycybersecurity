@@ -184,11 +184,12 @@ def checkemail():
    
 
 
-def move_robot(distance):
+def move_robot(distance, speed=0.1):
     if (distance>3): distance = 3
     if (distance<-3): distance = -3
+    speed = min(abs(speed), 0.26)
     print("MOVING ROBOT: %0.2fm" % distance)
-    os.system('ros2 run com_offer_holder_days forward.py --ros-args -p dist:=%0.3f &' % distance)
+    os.system(f"ros2 run com_offer_holder_days forward.py --ros-args -p dist:={distance:0.3f} -p speed:={speed:0.2f} &")
     
 def turn_robot(angle):
     if (angle>360): angle = 360
@@ -216,7 +217,7 @@ def fullcontrol():
         return jsonify([]), 401
     
     if request.args['button']=='fastforward':
-        move_robot(0.5)
+        move_robot(0.5, 0.2)
     if request.args['button']=='forward':
         move_robot(0.05)
     if request.args['button']=='backward':
