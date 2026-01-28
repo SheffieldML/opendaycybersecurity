@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <title>George Bobbins – Sheffield Social</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --brand-main: #440099; /* Matching the Diamond Forge purple */
+      --brand-accent: #7000ff;
+      --bg-page: #f0f2f5;
+      --bg-card: #ffffff;
+      --text-main: #1c1e21;
+      --text-muted: #65676b;
+      --border: #dadde1;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+    }
+
+    /* --- NAVIGATION --- */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; }
+    .logo-badge {
+      background: linear-gradient(135deg, var(--brand-main), var(--brand-accent));
+      color: white;
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.4rem;
+      text-decoration: none;
+    }
+    .brand-name { font-weight: 700; font-size: 1.25rem; color: var(--brand-main); letter-spacing: -0.5px; }
+    
+    .search-box {
+      background: #f0f2f5;
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      display: flex; align-items: center;
+      width: 260px;
+      margin-left: 10px;
+    }
+    .search-box input {
+      border: none; background: transparent; outline: none; width: 100%;
+      font-size: 0.9rem;
+    }
+
+    /* --- PROFILE SECTION --- */
+    main { max-width: 980px; margin: 0 auto; background: #fff; }
+
+    .cover-photo {
+      width: 100%; height: 320px;
+      background: #ccd0d5;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .profile-header-bar {
+      position: relative;
+      padding: 0 2rem 1rem 14.5rem; 
+      border-bottom: 1px solid var(--border);
+      min-height: 100px;
+    }
+
+    .profile-photo-circle {
+      position: absolute;
+      left: 2.5rem;
+      top: -90px;
+      width: 168px; height: 168px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .profile-photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+    .profile-name { font-size: 2rem; font-weight: 700; margin: 0.8rem 0 0 0; color: #050505; }
+    .profile-tagline { color: var(--text-muted); font-size: 1rem; margin: 4px 0; }
+
+    /* --- LAYOUT --- */
+    .content-container {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-page);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+
+    .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #050505; }
+    .intro-item { margin-bottom: 0.8rem; display: flex; align-items: flex-start; gap: 10px; font-size: 0.95rem; }
+
+    /* --- POSTS --- */
+    .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .post-avatar { width: 40px; height: 40px; border-radius: 50%; }
+    .post-info { display: flex; flex-direction: column; }
+    .author { font-weight: 600; font-size: 0.95rem; color: #050505; }
+    .meta { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+
+    .post-body { line-height: 1.5; font-size: 0.95rem; color: #050505; }
+    
+    .attached-photo {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-top: 10px;
+      display: block;
+    }
+
+    @media (max-width: 850px) {
+      .profile-header-bar { padding: 5.5rem 1rem 1.5rem 1rem; text-align: center; }
+      .profile-photo-circle { left: 50%; transform: translateX(-50%); top: -84px; }
+      .content-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="#" class="logo-badge">S</a>
+      <span class="brand-name">Sheffield Social</span>
+      <div class="search-box">
+        <input type="text" placeholder="Search Sheffield Social">
+      </div>
+    </div>
+    <div style="font-size: 1.4rem; cursor: pointer; color: var(--text-muted); display: flex; gap: 20px;">
+        <span>🏠</span><span>🔔</span><span>👤</span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="cover-photo">
+      <img src="pexels-photo-1054666.jpeg" alt="Cover Image">
+    </div>
+
+    <div class="profile-header-bar">
+      <div class="profile-photo-circle">
+        <img src="Gemini_Generated_gb.jpg" alt="George Bobbins">
+      </div>
+      <h1 class="profile-name">George Bobbins</h1>
+      <p class="profile-tagline">Graduate IT Trainee @ Diamond Forge | Elephant Enthusiast 🐘</p>
+    </div>
+
+    <div class="content-container">
+      <aside>
+        <div class="card">
+          <h2 class="card-title">Intro</h2>
+          <div class="intro-item">💼 <span>Works at <strong>Diamond Forge IT</strong></span></div>
+          <div class="intro-item">🏠 <span>Lives in <strong>Sheffield</strong></span></div>
+          <div class="intro-item">📍 <span>From <strong>Nottingham</strong></span></div>
+          <div class="intro-item">🎂 <span>Birthday: <strong>May 12th</strong></span></div>
+          <div class="intro-item">✉️ <span style="font-size: 0.85rem; color: var(--brand-main);">g.bobbins@diamondforge.uk</span></div>
+        </div>
+      </aside>
+
+      <section>
+        
+        <article class="card">
+          <div class="post-header">
+            <img src="Gemini_Generated_gb.jpg" class="post-avatar" class="post-avatar">
+            <div class="post-info">
+              <span class="author">George Bobbins</span>
+              <span class="meta">Yesterday at 14:10 · Public · 🌍</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Monday morning at the new office. ☕ Level 3 is surprisingly quiet today!
+            <img src="post.jpg" class="attached-photo" alt="A desk with a mug, a computer, and a card.">
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="post-header">
+            <img src="Gemini_Generated_gb.jpg" class="post-avatar">
+            <div class="post-info">
+              <span class="author">George Bobbins</span>
+              <span class="meta">3 hours ago · Public · 🌍</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Starting to feel like a real professional. Just a reminder to any work contacts—please use <strong>g.bobbins@diamondforge.uk</strong> from now on. Emma from the IT team finally got my account migrated, so I'm strictly using my old Gmail for memes and spam now! 📩
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="post-header">
+            <img src="Gemini_Generated_gb.jpg" class="post-avatar">
+            <div class="post-info">
+              <span class="author">George Bobbins</span>
+              <span class="meta">3 days ago · Public · 🌍</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Found a box from Nottingham while unpacking. Guess who I found! Say hello to <strong>Trompy</strong>, my childhood lucky charm. He's officially the office mascot now. 🐘 Some things you just never get too old for.
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="post-header">
+            <img src="Gemini_Generated_gb.jpg" class="post-avatar">
+            <div class="post-info">
+              <span class="author">George Bobbins</span>
+              <span class="meta">Last Tuesday · Public · 🌍</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Is it just me, or does it feel like I just reset my password last week? 🙄 90-day policies are the worst. At least I've got a system that never fails me!
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="post-header">
+            <img src="Gemini_Generated_gb.jpg" class="post-avatar">
+            <div class="post-info">
+              <span class="author">George Bobbins</span>
+              <span class="meta">2 weeks ago · Public · 🌍</span>
+            </div>
+          </div>
+          <div class="post-body">
+            I am thrilled to announce that I have now joined Sheffield Forge! Thanks Emma for showing mearound the office last week. Looking forward to getting started!
+          </div>
+        </article>
+
+      </section>
+    </div>
+  </main>
+
+  </body>
+</html>
