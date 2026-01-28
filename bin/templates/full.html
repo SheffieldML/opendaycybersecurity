@@ -1,41 +1,182 @@
 <html lang="en">
-    
-    <head>
-        <meta charset="utf-8" />
-        <title>Full Control</title>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-            
-        </script>
-        
-    </head>
-    
-    <body>
-    <h1>Full Control</h1>
-<p><span class='control' id='fastforward' style='position:relative; left:80px;'><img src="/static/up_small.png"></span><br/>
-<span class='control' id='forward' style='position:relative; left:80px;'><img src="/static/up_small.png"></span><br/>
-<span class='control'  id='left' style='position:relative; left:0px;'><img src="/static/left_small.png"></span><span class='control' id='right' style='position:relative; left:80px;'><img src="/static/right_small.png"></span><br/>
-<span class='control' id='backward' style='position:relative; left:80px;'><img src="/static/down_small.png"></span></p>
-(you can use the arrow keys!)
-<script type="text/javascript"> 
-num_emails = 0;
-            $(document).on('keyup',function(event){
-            if (event.keyCode==37) {$('#left').click();}
-            if (event.keyCode==40) {$('#backward').click();}
-            if (event.keyCode==39) {$('#right').click();}
-            if (event.keyCode==38) {$('#forward').click();}
-            });
-            $('.control').on('click',function(){
-                console.log("TEST");
-                url = 'http://{{server}}/fullcontrol?button='+$(this).attr("id");
-                $.getJSON(url, function(data) {
-                    console.log("Forward");
-                    $(this).hide();
-                    $(this).fadeIn(3000);
-                });
-            }) 
+  <head>
+    <meta charset="utf-8" />
+    <title>Full Control</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 stroke=%22%237000ff%22 stroke-width=%225%22 fill=%22none%22/><path d=%22M50 20 L85 45 L70 80 L30 80 L15 45 Z%22 fill=%22%23c6bbff%22/></svg>">
 
-        
-        </script>
+    <style>
+      :root {
+        --shef-brand: #440099;
+        --shef-bg: #24125e;
+        --shef-cta: #7000ff;
+        --shef-soft-1: #a78cfa;
+        --shef-soft-2: #c6bbff;
+        --shef-blue: #005a8f;
+        --shef-teal: #00bbcc;
+        --shef-teal-soft: #9adbe8;
+        --text-on-dark: #f5f3ff;
+        --text-on-light: #201540;
+      }
+      html, body { margin: 0; padding: 0; }
+      body {
+        min-height: 100vh; background-color: var(--shef-bg);
+        color: var(--text-on-dark);
+        font-family: system-ui, sans-serif;
+        display: flex; flex-direction: column;
+      }
 
-</body>
+      header.main-header {
+        background-color: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--shef-brand);
+        padding: 1rem 0; margin-bottom: 2rem;
+      }
+      .header-content {
+        max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+        display: flex; align-items: center; gap: 15px;
+      }
+      .logo-icon { width: 50px; height: 50px; }
+      .brand-name { display: flex; flex-direction: column; line-height: 1.1; }
+      .brand-title { font-weight: 700; font-size: 1.4rem; color: #fff; letter-spacing: 0.03em; }
+      .brand-subtitle { font-size: 0.85rem; color: var(--shef-soft-1); text-transform: uppercase; letter-spacing: 0.1em; }
+
+      .container {
+        max-width: 46rem; margin-left: auto; margin-right: auto;
+        padding: 0 1.5rem 2rem 1.5rem; flex: 1; width: 100%; box-sizing: border-box;
+      }
+
+      h1 {
+        margin-top: 0; margin-bottom: 1rem; padding-bottom: 0.35rem;
+        border-bottom: 3px solid var(--shef-soft-1); font-size: 1.6rem;
+      }
+
+      .control-pad {
+        display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 2rem;
+      }
+      .row { display: flex; gap: 10px; align-items: center; }
+
+      .control {
+        background: var(--shef-bg);
+        border: 2px solid var(--shef-cta);
+        border-radius: 12px;
+        width: 60px; height: 60px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.1s ease;
+        box-shadow: 0 4px 0 var(--shef-brand);
+      }
+
+      .control:active, .control.active-press {
+        transform: translateY(4px); box-shadow: 0 0 0 var(--shef-brand); background: var(--shef-brand);
+      }
+      .control svg { width: 32px; height: 32px; fill: var(--shef-soft-2); }
+      .control:hover svg { fill: #fff; }
+
+      .hint-text { text-align: center; margin-top: 2rem; color: var(--shef-soft-1); font-size: 0.9rem; }
+
+      /* Footer */
+      .main-footer {
+        background-color: rgba(0, 0, 0, 0.3); border-top: 1px solid var(--shef-brand);
+        padding: 1rem 0; margin-top: 3rem; font-size: 0.85rem; color: var(--shef-soft-1);
+      }
+      .footer-content {
+        max-width: 46rem; margin: 0 auto; padding: 0 1.5rem;
+        display: flex; justify-content: space-between; align-items: center;
+      }
+      .footer-left strong { color: #fff; }
+      .separator { margin: 0 0.5rem; opacity: 0.5; }
+      .footer-right {
+        display: flex; align-items: center; gap: 8px;
+        background: rgba(0,0,0,0.2); padding: 4px 10px;
+        border-radius: 99px; border: 1px solid var(--shef-brand);
+      }
+      .status-indicator {
+        width: 8px; height: 8px; background-color: #00ff88;
+        border-radius: 50%; box-shadow: 0 0 8px #00ff88;
+      }
+      .status-text { font-weight: 600; color: #ccffdd; }
+      @media (max-width: 600px) {
+        .header-content { flex-direction: row; } 
+        .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  
+  <body>
+    <header class="main-header">
+      <div class="header-content">
+        <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="50" cy="50" r="45" stroke="#7000ff" stroke-width="5" fill="none"/>
+           <path d="M50 20 L85 45 L70 80 L30 80 L15 45 Z" fill="#c6bbff" stroke="#440099" stroke-width="3" stroke-linejoin="round"/>
+           <path d="M15 45 L30 80 M85 45 L70 80 M15 45 L50 50 M85 45 L50 50 M30 80 L50 50 M70 80 L50 50 M15 45 L50 20 M85 45 L50 20" stroke="#440099" stroke-width="1.5" stroke-opacity="0.6"/>
+        </svg>
+        <div class="brand-name">
+          <span class="brand-title">Diamond Forge</span>
+          <span class="brand-subtitle">Sheffield</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <h1>Full Control</h1>
+      
+      <div class="control-pad">
+        <div class="row">
+          <span class='control' id='forward'>
+            <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z" /></svg>
+          </span>
+        </div>
+        <div class="row middle">
+          <span class='control' id='left'>
+            <svg viewBox="0 0 24 24"><path d="M4 12l8-8v6h8v4h-8v6z" /></svg>
+          </span>
+          <span class='control' id='right'>
+            <svg viewBox="0 0 24 24"><path d="M20 12l-8 8v-6h-8v-4h8v-6z" /></svg>
+          </span>
+        </div>
+        <div class="row">
+          <span class='control' id='backward'>
+             <svg viewBox="0 0 24 24"><path d="M12 20l8-8h-6v-8h-4v8h-6z" /></svg>
+          </span>
+        </div>
+      </div>
+
+      <p class="hint-text">
+        Use arrow keys or click buttons to move.
+      </p>
+    </div>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-left">
+          <span>&copy; 2026 <strong>Diamond Forge</strong></span>
+          <span class="separator">|</span>
+          <span>Sheffield</span>
+        </div>
+        <div class="footer-right">
+          <span>System Status:</span>
+          <span class="status-indicator"></span>
+          <span class="status-text">Online</span>
+        </div>
+      </div>
+    </footer>
+
+    <script type="text/javascript"> 
+        function pressBtn(id) {
+           var btn = $('#' + id);
+           btn.addClass('active-press');
+           btn.click();
+           setTimeout(function() { btn.removeClass('active-press'); }, 150);
+        }
+        $(document).on('keyup',function(event){
+            if (event.keyCode==37) { pressBtn('left'); }
+            if (event.keyCode==40) { pressBtn('backward'); }
+            if (event.keyCode==39) { pressBtn('right'); }
+            if (event.keyCode==38) { pressBtn('forward'); }
+        });
+        $('.control').on('click',function(){
+            console.log("Button clicked: " + $(this).attr("id"));
+            var url = 'http://{{server}}/fullcontrol?button='+$(this).attr("id");
+            $.getJSON(url, function(data) { });
+        }) 
+    </script>
+  </body>
 </html>
