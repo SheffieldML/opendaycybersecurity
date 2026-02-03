@@ -31,8 +31,11 @@ In a new terminal, run:
 ```
 ros2 run rmw_zenoh_cpp rmw_zenohd
 ```
+Finally: Type Ctrl-B D (this detaches the tmux windows, so the students can't see it).
 
 ## Running the Web Server
+First start another tmux window, type: `tmux`.
+Then:
 
 Activate the virtual environment:
 
@@ -45,6 +48,8 @@ Launch the activity:
 ```
 activity
 ```
+
+Finally detach the tmux window: `Ctrl-B D`. This hides the server from the students.
 
 ### Stopping the Web Server
 
