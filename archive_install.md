@@ -34,7 +34,7 @@ Add links to the bookmarks toolbar:
 - [Challenge 1](http://127.0.0.1:5000/rotate.html)
 - [Challenge 2](http://127.0.0.1:5000/move.html)
 - [Challenge 3](http://127.0.0.1:5000/email.html)
-- [Social Media](https://drive.usercontent.google.com/download?id=1v7-TGm-g1czj2YieQFv8SVL3YLpqlG55)
+- [Social Media](http://127.0.0.1:5000/social.html)
 - [Full Control](http://127.0.0.1:5000/full.html)
 
 ## Installing the `com_offer_holder_days` ROS 2 Package
