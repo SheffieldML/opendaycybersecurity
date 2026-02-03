@@ -1,6 +1,6 @@
 import threading
 import random
-from flask import Flask, make_response, jsonify, render_template
+from flask import Flask, make_response, jsonify, render_template, send_file
 from flask import request
 import datetime
 import numpy as np
@@ -30,6 +30,22 @@ def move_form():
 @app.route("/email.html")
 def email_form():
     return render_template('email.html',server="127.0.0.1:%d" % port)
+
+@app.route("/social.html")
+def social():
+    return render_template('social.html',server="127.0.0.1:%d" % port)
+    
+@app.route("/post.jpg")
+def postjpg():
+    return send_file('../bin/templates/post.jpg', mimetype='image/gif') #render_template('post.jpg',server="127.0.0.1:%d" % port) 
+    
+@app.route("/george.jpg")
+def georgejpg():
+    return send_file('../bin/templates/george.jpg', mimetype='image/gif') #render_template('post.jpg',server="127.0.0.1:%d" % port) 
+    
+@app.route("/elephant.jpeg")
+def elephantjpg():
+    return send_file('../bin/templates/elephant.jpeg', mimetype='image/gif') #render_template('post.jpg',server="127.0.0.1:%d" % port)     
     
 @app.route("/full.html")
 def full_form():
