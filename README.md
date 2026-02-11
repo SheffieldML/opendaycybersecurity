@@ -29,6 +29,10 @@ ros2 launch tuos_tb3_tools ros.launch.py
 ```
 In a new terminal, run:
 ```
+tmux
+```
+then inside that tmux screen,
+```
 ros2 run rmw_zenoh_cpp rmw_zenohd
 ```
 Finally: Type Ctrl-B D (this detaches the tmux windows, so the students can't see it).
