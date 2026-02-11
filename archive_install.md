@@ -37,6 +37,9 @@ Add links to the bookmarks toolbar:
 - [Social Media](http://127.0.0.1:5000/social.html)
 - [Full Control](http://127.0.0.1:5000/full.html)
 
+### Text Editor
+In preferences, disable the ‘restore session’ in notepad.
+
 ## Installing the `com_offer_holder_days` ROS 2 Package
 
 **No longer necessary**: this is installed globally on the laptop (rather than locally to the User's workspace).
