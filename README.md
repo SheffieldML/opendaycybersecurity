@@ -25,7 +25,7 @@ waffle X term
 ```
 Then:
 ```
-ros2 launch tuos_tb3_tools ros.launch.py
+tb3_bringup
 ```
 In a new terminal, run:
 ```
@@ -33,15 +33,18 @@ tmux
 ```
 then inside that tmux screen,
 ```
-ros2 run rmw_zenoh_cpp rmw_zenohd
+rmwz
 ```
-Finally: Type Ctrl-B D (this detaches the tmux windows, so the students can't see it).
+Finally: Type `Ctrl-B` + `D` (this detaches the tmux windows, so the students can't see it).
 
 ## Running the Web Server
-First start another tmux window, type: `tmux`.
-Then:
+First start another tmux window: 
 
-Activate the virtual environment:
+```
+tmux
+```
+
+Then, activate the virtual environment:
 
 ```
 source ~/opendaycybersecurity/venv/bin/activate
@@ -53,7 +56,7 @@ Launch the activity:
 activity
 ```
 
-Finally detach the tmux window: `Ctrl-B D`. This hides the server from the students.
+Finally, detach the tmux window: `Ctrl-B` + `D`. This hides the server from the students.
 
 ### Stopping the Web Server
 
