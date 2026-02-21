@@ -14,8 +14,10 @@ args = parser.parse_args()
 
 #delete th wireshark config file, so filters aren't shown.
 #pathlib.Path.unlink('~/.config/wireshark/recent_common',missing_ok=True)
-os.remove(os.path.expanduser("~")+'/.config/wireshark/recent_common')
-
+try:
+  os.remove(os.path.expanduser("~")+'/.config/wireshark/recent_common')
+except: #if the file isn't there, this raises an exception. Silently ignore.
+  pass
 #some of these modules start running threads, so need importing after parser, so it can terminate the whole program with 'exit' if --help is called.
 import numpy as np
 from threading import Timer

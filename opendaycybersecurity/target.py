@@ -132,6 +132,7 @@ email_reply = None
 email_countdown = datetime.datetime.now()
 move_success = False
 turn_success = False
+robot_command_time = datetime.datetime.now()
 
 @app.route('/sendemail', methods=['POST', 'GET'])
 def sendemail(): 
@@ -201,6 +202,10 @@ def checkemail():
 
 
 def move_robot(distance, speed=0.1):
+    global robot_command_time
+    if datetime.datetime.now()<robot_command_time:
+        return
+    robot_command_time = datetime.datetime.now()+datetime.timedelta(seconds=1)
     if (distance>3): distance = 3
     if (distance<-3): distance = -3
     speed = min(abs(speed), 0.26)
@@ -208,6 +213,11 @@ def move_robot(distance, speed=0.1):
     os.system(f"ros2 run com_offer_holder_days forward.py --ros-args -p dist:={distance:0.3f} -p speed:={speed:0.2f} &")
     
 def turn_robot(angle):
+    global robot_command_time
+    if datetime.datetime.now()<robot_command_time:
+        return
+    robot_command_time = datetime.datetime.now()+datetime.timedelta(seconds=1)
+
     if (angle>360): angle = 360
     if (angle<-360): angle = -360
     print("TURNING ROBOT: %d degrees" % angle)
@@ -235,9 +245,9 @@ def fullcontrol():
     if request.args['button']=='fastforward':
         move_robot(0.5, 0.2)
     if request.args['button']=='forward':
-        move_robot(0.05)
+        move_robot(0.08)
     if request.args['button']=='backward':
-        move_robot(-0.05)
+        move_robot(-0.04)
     if request.args['button']=='left':
         turn_robot(20)
     if request.args['button']=='right':
