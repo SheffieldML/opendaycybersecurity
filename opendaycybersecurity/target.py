@@ -227,9 +227,13 @@ def turn_robot(angle):
 def movecontrol(): 
     d = json.load(open('secrets.json'))
     if (request.args['username']==d['activity2']['username']) and (request.args['password']==d['activity2']['password']):
-        move_robot(float(request.args['distance']))
+        try:
+            dist = float(request.args['distance'])
+        except:
+            return "Distance entered was not valid.", 412
+        move_robot(dist)
         global move_success
-        if float(request.args['distance'])!=0.0: #the synthetic user always sends a '0.0' -- we don't want that user allowing us access.
+        if dist!=0.0: #the synthetic user always sends a '0.0' -- we don't want that user allowing us access.
             move_success = True
         return "Access granted. Moving robot %0.3f m" % float(request.args['distance'])
     return "Access denied.", 401
@@ -270,7 +274,7 @@ def rotationcontrol():
                 turn_success = True
             return "Access granted. Rotating robot %0d degrees" % int(request.args['angle'])
         except:
-            return "Control failed (did you fill all the form fields correctly?)"
+            return "Control failed (did you fill all the form fields correctly?)", 412
     return "Access denied.", 401
 
 #@app.route('/email/',methods=['POST','GET'])
