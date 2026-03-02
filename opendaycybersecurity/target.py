@@ -9,6 +9,8 @@ from flask_cors import CORS
 import json
 import os
 import opendaycybersecurity
+import sqlite3
+
 #base_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin'])
 #os.chdir(base_folder)
 template_folder = os.sep.join(opendaycybersecurity.__file__.split(os.sep)[:-2] + ['bin','templates'])
@@ -30,6 +32,11 @@ def move_form():
 @app.route("/email.html")
 def email_form():
     return render_template('email.html',server="127.0.0.1:%d" % port)
+    
+@app.route("/inventory.html")
+def inventory_form():
+    return render_template('inventory.html',server="127.0.0.1:%d" % port)
+
 
 @app.route("/social.html")
 def social():
@@ -146,7 +153,7 @@ def sendemail():
     msg = args['message'].translate(mpa)
     sub = args['subject'].translate(mpa)
     email_countdown = datetime.datetime.now() + datetime.timedelta(0,random.randrange(3,6))
-    if (len(msg)>50) and (len(sub)>3):
+    if (len(msg)>50):# and (len(sub)>3):
         email_reply = True
         
     else:
@@ -169,6 +176,65 @@ def sendemail():
 #        return "failed to check email", 503 #jsonify('Failed to check email.',status=503)
 #    return contents
 
+def create_db():
+    try:
+        os.remove('inventory.db')
+    except:
+        pass
+    con = sqlite3.connect("inventory.db")
+    cur = con.cursor()
+    cur.execute("CREATE TABLE inventory(dropper, amount)")
+    cur.execute("INSERT INTO inventory VALUES(1,96)")
+    cur.execute("INSERT INTO inventory VALUES(2,95)")
+    cur.execute("INSERT INTO inventory VALUES(3,97)")
+    cur.execute("INSERT INTO inventory VALUES(4,93)")
+    con.commit()
+    con.close()
+
+
+#def decrement_inventory(dropper):
+#    con = sqlite3.connect("inventory.db")
+#    cur = con.cursor()
+#    cur.execute("UPDATE inventory SET amount = amount - 1 WHERE dropper=?;", dropper)
+#    con.commit()
+
+#    con.close()
+@app.route('/getinventory/', methods=['POST', 'GET'])
+def getinventory_nodata():
+    return jsonify(['No dropper number entered. Enter a value between 1 and 4.'])
+
+@app.route('/getinventory/<string:dropper>', methods=['POST', 'GET'])
+def getinventory(dropper):
+
+    con = sqlite3.connect("inventory.db")
+    cur = con.cursor()
+    commands = "SELECT dropper, amount FROM inventory WHERE dropper=%s;" % dropper
+    
+    try:
+        #hack to cause sql injection vulnerability!
+        for command in commands.split(";"):
+            print(command)
+            if len(command)>1:
+                res = cur.execute(command)
+    except Exception as e:
+        return jsonify(["Error in value entered. Enter a value between 1 and 4.","Error:","%s" % e])
+    
+    datastringlist = []
+    notfound = True
+    while True:
+        d = res.fetchone()
+        print("d:")
+        print(d)
+        if d is None:
+            break
+        datastringlist.append("dropper %d: %d" % (d[0],d[1]))
+        notfound = False
+    if notfound:
+        datastringlist.append("Dropper %s not found" % dropper)
+    con.commit() #wouldn't need this -- but this is needed for making it possible to do injection attack
+    con.close()
+    return jsonify(datastringlist)
+    
 
 @app.route('/checkemail', methods=['POST', 'GET'])
 def checkemail():
@@ -307,6 +373,7 @@ def start_target(remoteserver,localport=5000):
     server = remoteserver
     global port
     port = localport
+    create_db()
     t = threading.Thread(target=worker,args=(port,))
     t.start()
     return t
