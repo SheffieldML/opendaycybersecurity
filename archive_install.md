@@ -36,6 +36,7 @@ Add links to the bookmarks toolbar:
 - [Challenge 3](http://127.0.0.1:5000/email.html)
 - [Social Media](http://127.0.0.1:5000/social.html)
 - [Full Control](http://127.0.0.1:5000/full.html)
+- [Challenge 5](http://127.0.0.1:5000/inventory.html)
 
 ### Text Editor
 In preferences, disable the ‘restore session’ in notepad.
