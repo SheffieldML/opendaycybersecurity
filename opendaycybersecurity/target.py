@@ -52,7 +52,11 @@ def georgejpg():
     
 @app.route("/elephant.jpeg")
 def elephantjpg():
-    return send_file('../bin/templates/elephant.jpeg', mimetype='image/gif') #render_template('post.jpg',server="127.0.0.1:%d" % port)     
+    return send_file('../bin/templates/elephant.jpeg', mimetype='image/gif') #render_template('post.jpg',server="127.0.0.1:%d" % port)  
+
+@app.route("/logoblue.jpg")
+def logobluejpg():
+    return send_file('../bin/templates/logoblue.jpg', mimetype='image/gif')   
     
 @app.route("/full.html")
 def full_form():
