@@ -27,6 +27,9 @@ Then:
 ```
 tb3_bringup
 ```
+
+Close down this window (click "Close Terminal" if asked).
+
 In a new terminal, run:
 ```
 tmux
@@ -68,10 +71,38 @@ pkill activity
 
 (from a separate terminal.)
 
-### Using tmux:
+### Using tmux (a very quick guide!):
 
+#### List Sessions
+
+To list all tmux sessions:
 ```
 tmux ls
-tmux a -t 0
-Ctrl-B d
 ```
+If you followed the steps above, there should be two listed:
+```
+tmux ls
+0: 1 windows (created Day Month Year HH:MM:SS YYYY)
+1: 1 windows (created Day Month Year HH:MM:SS YYYY)
+```
+Session id's are the left most numbers in the above (i.e. `0` and `1`).
+
+#### Attach (return) to an existing session
+
+To attach to a session (e.g. `0` or `1` from above)
+
+```
+tmux a -t SESSION_ID
+```
+e.g. to return to session `0`:
+```
+tmux a -t 0
+```
+Or to return to session `1`:
+```
+tmux a -t 1
+```
+
+#### Detach (exit from) a session 
+
+Leave (i.e. "detach from") a tmux session: `Ctrl-B` + `d`.
